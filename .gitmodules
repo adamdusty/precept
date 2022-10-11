@@ -1,0 +1,6 @@
+[submodule "precept-pcl"]
+	path = precept-pcl
+	url = https://github.com/adamdusty/precept-pcl.git
+[submodule "precept-pcc"]
+	path = precept-pcc
+	url = https://github.com/adamdusty/precept-pcc.git
