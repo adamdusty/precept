@@ -54,6 +54,10 @@ func Tokenize(source io.Reader) []token.Token {
 			tok = token.Token{Type: token.LeftBracket, Lexeme: "["}
 		case ']':
 			tok = token.Token{Type: token.RightBracket, Lexeme: "]"}
+		case ';':
+			tok = token.Token{Type: token.SemiColon, Lexeme: ";"}
+		case ':':
+			tok = token.Token{Type: token.Colon, Lexeme: ":"}
 		case '=':
 			if match(lex, '=') {
 				tok = token.Token{Type: token.EqualEq, Lexeme: "=="}

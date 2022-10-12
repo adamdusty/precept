@@ -24,6 +24,8 @@ const (
 	LeftBracket  = "["
 	RightBracket = "]"
 	QuestionMark = "?"
+	SemiColon    = ";"
+	Colon        = ":"
 
 	// Single or double character tokens
 	Equal     = "="
