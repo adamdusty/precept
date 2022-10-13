@@ -18,8 +18,6 @@ statement: expression ;
 
 expression: literal ;
 
-
-
 literal: string_literal
        | integer_literal
        | decimal_literal

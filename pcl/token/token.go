@@ -1,6 +1,6 @@
 package token
 
-type TokenType string
+type TokenType int16
 
 type Token struct {
 	Type   TokenType
@@ -10,37 +10,42 @@ type Token struct {
 }
 
 const (
+	// Special
+	Error TokenType = -1
+	EOF   TokenType = 0
+
 	// Single character tokens
-	Plus         = "+"
-	Minus        = "-"
-	Star         = "*"
-	Slash        = "/"
-	Dot          = "."
-	Comma        = ","
-	LeftParen    = "("
-	RightParen   = ")"
-	LeftBrace    = "{"
-	RightBrace   = "}"
-	LeftBracket  = "["
-	RightBracket = "]"
-	QuestionMark = "?"
-	SemiColon    = ";"
-	Colon        = ":"
+	Plus TokenType = iota
+	Minus
+	Star
+	Slash
+	Dot
+	Comma
+	LeftParen
+	RightParen
+	LeftBrace
+	RightBrace
+	LeftBracket
+	RightBracket
+	QuestionMark
+	SemiColon
+	Colon
 
 	// Single or double character tokens
-	Equal     = "="
-	EqualEq   = "=="
-	Bang      = "!"
-	BangEq    = "!="
-	Greater   = ">"
-	GreaterEq = ">="
-	Less      = "<"
-	LessEq    = "<="
+	Equal
+	EqualEq
+	Bang
+	BangEq
+	Greater
+	GreaterEq
+	Less
+	LessEq
 
 	// Multicharacter tokens
-	String     = "string"
-	Number     = "number"
-	Identifier = "identifier"
+	String
+	Number
+	Identifier
 
 	// Keywords
+	Return
 )
