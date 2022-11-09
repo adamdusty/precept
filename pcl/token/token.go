@@ -5,8 +5,8 @@ type TokenType int16
 type Token struct {
 	Type   TokenType
 	Lexeme string
-	Column int
 	Line   int
+	Column int
 }
 
 const (
