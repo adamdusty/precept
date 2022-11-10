@@ -6,6 +6,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"github.com/adamdusty/precept/pcl"
 	"github.com/adamdusty/precept/pcl/token"
 )
 
@@ -69,7 +70,7 @@ func (lex *lexerState) peek() rune {
 }
 
 func isIdentStartChar(c rune) bool {
-	return unicode.IsOneOf(id_start, c)
+	return unicode.IsOneOf(id_start, c) && !unicode.IsOneOf(id_exclude, c)
 }
 
 func isIdentContinueChar(c rune) bool {
@@ -185,15 +186,24 @@ func scanNextToken(state *lexerState) (token.Token, *lexerState) {
 }
 
 func readStringLiteral(state *lexerState) (token.Token, *lexerState) {
+	pos := state.Position
 	builder := strings.Builder{}
 
-	for i := state.Position + 1; i <= state.Length-1; i += 1 {
-		c := state.Source[i]
+	for pos < state.Length-1 {
+		pos += 1
+
+		c := state.Source[pos]
+
 		if c == '"' {
 			break
 		}
 
 		builder.WriteRune(c)
+	}
+
+	if state.Source[pos] != '"' {
+		tok := token.Token{Type: token.Error, Line: state.Line, Column: state.Column, Lexeme: "Expected closing '\"'."}
+		return tok, state.advance(pos)
 	}
 
 	tok := token.Token{Type: token.String, Line: state.Line, Column: state.Column, Lexeme: builder.String()}
@@ -241,5 +251,29 @@ func readNumberLiteral(state *lexerState) (token.Token, *lexerState) {
 }
 
 func readIdentifier(state *lexerState) (token.Token, *lexerState) {
+	pos := state.Position
+	builder := strings.Builder{}
 
+	if isIdentStartChar(state.Source[pos]) {
+		builder.WriteRune(state.Source[pos])
+		pos += 1
+	}
+
+	for pos < state.Length {
+		if isIdentContinueChar(state.Source[pos]) {
+			builder.WriteRune(state.Source[pos])
+			pos += 1
+		} else {
+			break
+		}
+	}
+
+	lexeme := builder.String()
+	if val, ok := pcl.Keywords[lexeme]; ok {
+		tok := token.Token{Type: val, Line: state.Line, Column: state.Column, Lexeme: lexeme}
+		return tok, state.advance(pos)
+	}
+
+	tok := token.Token{Type: token.Identifier, Line: state.Line, Column: state.Column, Lexeme: lexeme}
+	return tok, state.advance(pos)
 }

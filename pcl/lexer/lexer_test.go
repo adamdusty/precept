@@ -283,3 +283,59 @@ func TestDecimalNumberLiteral(t *testing.T) {
 		}
 	}
 }
+
+func TestNonKeywordIdentifier(t *testing.T) {
+	input := "this_is_an_identifier"
+	expected := []token.Token{{Type: token.Identifier, Line: 1, Column: 0, Lexeme: "this_is_an_identifier"}}
+
+	actual, err := lexer.Tokenize(input)
+
+	if err != nil {
+		t.Errorf("Error lexing: %s", err.Error())
+	}
+
+	if len(actual) != len(expected) {
+		t.Fatalf("Length of actual tokens not equal to expected: %d", len(actual))
+	}
+
+	for i := 0; i < len(actual); i++ {
+		if actual[i] != expected[i] {
+			t.Errorf("Actual token not equal to expected token: %v != %v", actual[i], expected[i])
+		}
+	}
+}
+
+func TestReturnKeyword(t *testing.T) {
+	input := "return"
+	expected := []token.Token{{Type: token.Return, Line: 1, Column: 0, Lexeme: "return"}}
+
+	actual, err := lexer.Tokenize(input)
+
+	if err != nil {
+		t.Errorf("Error lexing: %s", err.Error())
+	}
+
+	if len(actual) != len(expected) {
+		t.Fatalf("Length of actual tokens not equal to expected: %d", len(actual))
+	}
+
+	for i := 0; i < len(actual); i++ {
+		if actual[i] != expected[i] {
+			t.Errorf("Actual token not equal to expected token: %v != %v", actual[i], expected[i])
+		}
+	}
+}
+
+func TestUnclosedStringErrorToken(t *testing.T) {
+	input := `"hello world`
+
+	_, err := lexer.Tokenize(input)
+
+	if err == nil {
+		t.Error("Expected tokenize to return error for unclosed string quotation.")
+	}
+
+	if err.Error() != "Expected closing '\"'." {
+		t.Errorf("Unexpected error msg: %s", err.Error())
+	}
+}
